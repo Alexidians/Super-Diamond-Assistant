@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Diamond Assistant</title>
+  <!-- Include TensorFlow.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+</head>
+<body>
+
+<div id="chatbox"></div>
+<input type="text" id="userInput" placeholder="Type your message...">
+<button onclick="handleUserInput()">Send</button>
+
+<script>
+  async function initializeModel() {
+    // Load the Universal Sentence Encoder model using tf.loadGraphModel
+    const model = await tf.loadGraphModel('model.json');
+    return model;
+  }
+
+  async function predictUserInput(model, userInput) {
+    // Use the model to perform inference on user input
+    const embeddings = model.predict([userInput]);
+    // Implement logic to generate a response based on the embeddings
+    const response = "Hi there! How can I help you?";
+    return response;
+  }
+
+  function displayMessage(message) {
+    // Implement logic to display messages in the chatbox
+    // For example, append the message to a chat log
+    const chatbox = document.getElementById('chatbox');
+    chatbox.innerHTML += `<div>${message}</div>`;
+    // Scroll to the bottom of the chatbox
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
+
+  async function handleUserInput() {
+    const model = await initializeModel();
+    const userInput = document.getElementById('userInput').value;
+    predictUserInput(model, userInput).then(response => {
+      displayMessage(`User: ${userInput}`);
+      displayMessage(`AI: ${response}`);
+    });
+  }
+</script>
+
+</body>
+</html>
